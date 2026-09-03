@@ -398,7 +398,7 @@ body::after {
 
 /* Banner Carousel Section */
 .banner-carousel-section {
-    padding: 130px 0 50px 0;
+    padding: 80px 0 25px 0;
     background-color: rgba(11, 19, 43, 0.6);
     border-top: 1px solid rgba(60, 110, 113, 0.3);
     border-bottom: 1px solid rgba(60, 110, 113, 0.3);
@@ -436,14 +436,15 @@ body::after {
 
     /* This is the new layout */
     position: relative;
-    flex: 0 0 70%;
-    /* Each slide takes up 70% of the container */
-    margin: 0 2%;
+    flex: 0 0 85%;
+    max-width: calc((100vh - 150px) * 16 / 9);
+    /* Each slide takes up 85% of container, capped to fit screen height */
+    margin: 0 1.2%;
     /* Adds spacing between slides */
 
     /* Style for non-active slides */
     opacity: 0.4;
-    transform: scale(0.85);
+    transform: scale(0.88);
     transition: 0.5s ease all;
 
     /* Make sure images don't break layout */
@@ -463,12 +464,10 @@ body::after {
 
 .slide img {
     width: 100%;
+    height: auto;
     display: block;
-    object-fit: fill;
-    height: 500px;
-    /* Reduced height a bit, adjust as needed */
-    /* border-radius: 8px; */
-    /* Moved to .slide */
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
 }
 
 .slide-content {
@@ -476,7 +475,7 @@ body::after {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 40px;
+    padding: 25px 35px;
     background: linear-gradient(to top, rgba(3, 8, 26, 0.95) 20%, transparent);
     color: var(--heading-color);
     text-align: left;
@@ -485,9 +484,9 @@ body::after {
 
 .slide-content h2 {
     font-family: var(--font-heading);
-    font-size: 3.5rem;
+    font-size: 2.8rem;
     text-transform: uppercase;
-    margin: 0;
+    margin: 0 0 5px 0;
 }
 
 .slide-content p {
@@ -534,13 +533,13 @@ body::after {
 }
 
 .carousel-control.prev {
-    /* Adjusted position to be outside the main slide area */
-    left: 40px;
+    /* Adjusted position for wider slides */
+    left: 20px;
 }
 
 .carousel-control.next {
-    /* Adjusted position to be outside the main slide area */
-    right: 40px;
+    /* Adjusted position for wider slides */
+    right: 20px;
 }
 
 .carousel-dots {
@@ -1558,8 +1557,10 @@ body::after {
 }
 
     .slide img {
-    height: 350px;      /* Keeps the shorter image height */
-    /* NEW: Rounds *only* the top corners to fit the card */
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+    /* Rounds only the top corners to fit the card */
     border-radius: 8px 8px 0 0; 
 }
 
@@ -1916,9 +1917,9 @@ body::after {
     to { transform: translateY(0); }
 }
 
-/* Push the rest of the site down slightly so the navbar isn't covered */
-body {
-    padding-top: 50px; /* Adjust based on bar height */
+/* Push the rest of the site down slightly so the navbar isn't covered if alert is present */
+body:has(#registration-alert) {
+    padding-top: 50px;
 }
 
 /* Mobile Responsiveness */
@@ -1931,7 +1932,7 @@ body {
         flex-direction: row;
         text-align: left;
     }
-    body {
+    body:has(#registration-alert) {
         padding-top: 60px;
     }
 }
