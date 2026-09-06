@@ -845,11 +845,11 @@ body::after {
     /* Lighter blue background */
     color: var(--bg-color);
     /* Dark text on hover */
+    transform: scale(1.05);
 }
 
 .register-button {
     background: var(--accent-red);
-    /* New accent color */
     color: var(--heading-color);
     text-decoration: none;
     padding: 10px 25px;
@@ -860,18 +860,14 @@ body::after {
 }
 
 .register-button:hover {
-    transform: scale(1.05);
     background: var(--accent-orange);
-    /* Lighter blue hover */
     color: var(--bg-color);
-    /* Darker text */
-    box-shadow: 0 0 20px var(--accent-orange);
-    /* Lighter blue shadow */
+    transform: scale(1.05);
 }
 
 /* --- UPDATED GUIDELINES SECTION STYLES --- */
 #guidelines {
-    background-color: #050a1f;
+    background-color: rgba(5, 10, 31, 0.65);
     /* Slightly darker than primary */
     border-top: 1px solid var(--accent-red);
     /* New accent color */
@@ -1025,7 +1021,7 @@ body::after {
 /* ===== START: UPDATED SPONSORS SECTION (Including Food Tier) ===== */
 #sponsors {
     /* Use the darkest background for high contrast */
-    background-color: var(--bg-color);
+    background-color: rgba(11, 11, 13, 0.65);
     border-top: 1px solid var(--accent-red);
     border-bottom: 1px solid var(--accent-red);
     padding: 100px 0;
@@ -1213,7 +1209,7 @@ body::after {
 
 /* ===== START: NEW CONTACT & VENUE STYLES ===== */
 .contact-venue-section {
-    background-color: var(--primary-color);
+    background-color: rgba(26, 17, 17, 0.65);
     /* Use primary as base */
     border-top: 1px solid rgba(60, 110, 113, 0.3);
 }
@@ -1942,3 +1938,126 @@ body:has(#registration-alert) {
         padding-top: 60px;
     }
 }
+
+/* ===== START: PROMO POPUP ADDON ===== */
+.brochure-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(3, 8, 26, 0.9);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    padding: 40px;
+}
+
+.brochure-modal.show-brochure {
+    display: flex;
+    opacity: 1;
+}
+
+.brochure-content {
+    position: relative;
+    width: auto;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: scaleUp 0.5s ease;
+    overflow: visible;
+}
+
+.brochure-content img:not(.food-sticker) {
+    max-height: 80vh;
+    width: auto;
+    max-width: 100%;
+    display: block;
+    border-radius: 8px;
+    border: 2px solid var(--accent-red);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    object-fit: contain;
+}
+
+.food-sticker {
+    position: absolute;
+    width: 220px;
+    top: -30px;
+    left: -110px;
+    z-index: 2002;
+    filter: drop-shadow(8px 8px 15px rgba(0,0,0,0.6));
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    pointer-events: none;
+}
+
+.close-brochure {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 40px;
+    height: 40px;
+    background-color: var(--accent-red);
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid var(--heading-color);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    transition: all 0.3s ease;
+    z-index: 2003;
+}
+
+.close-brochure:hover {
+    background-color: var(--accent-orange);
+    transform: scale(1.1);
+}
+
+@keyframes scaleUp {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 900px) {
+    .food-sticker {
+        width: 180px;
+        left: -80px;
+        top: -60px;
+    }
+}
+
+@media (max-width: 600px) {
+    .brochure-modal {
+        padding: 20px;
+    }
+
+    .brochure-content {
+        margin-top: 60px;
+    }
+
+    .food-sticker {
+        width: 140px;
+        top: -65px;
+        left: -10px;
+    }
+
+    .close-brochure {
+        width: 35px;
+        height: 35px;
+        line-height: 35px;
+        font-size: 18px;
+        top: -15px;
+        right: -10px;
+    }
+}
+/* ===== END: PROMO POPUP ADDON ===== */

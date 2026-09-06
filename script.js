@@ -272,3 +272,24 @@ function closeAlert() {
         document.body.style.paddingTop = '0';
     }
 }
+
+// ===== START: PROMO POPUP ADDON =====
+const brochureModal = document.getElementById('brochure-modal');
+const closeBrochureBtn = document.querySelector('.close-brochure');
+
+if (brochureModal && closeBrochureBtn) {
+    setTimeout(() => {
+        brochureModal.classList.add('show-brochure');
+    }, 1000);
+
+    closeBrochureBtn.addEventListener('click', () => {
+        brochureModal.classList.remove('show-brochure');
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === brochureModal) {
+            brochureModal.classList.remove('show-brochure');
+        }
+    });
+}
+// ===== END: PROMO POPUP ADDON =====
