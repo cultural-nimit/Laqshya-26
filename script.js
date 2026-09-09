@@ -31,10 +31,32 @@ document.addEventListener('DOMContentLoaded', function () {
             modalTitle.textContent = button.dataset.modalTitle;
             const guidelines = button.dataset.modalContent.split('|');
             modalBody.innerHTML = '';
+            let currentItem;
+            let currentIndent = 0;
+
             guidelines.forEach(guideline => {
-                const li = document.createElement('li');
-                li.textContent = guideline;
-                modalBody.appendChild(li);
+                const text = guideline.replace(/\r?\n/g, '');
+                const content = text.trim().replace(/^•\s*/, '');
+                if (!content) return;
+
+                const indent = text.length - text.trimStart().length;
+                if (!currentItem || indent <= currentIndent) {
+                    currentItem = document.createElement('li');
+                    currentItem.textContent = content;
+                    modalBody.appendChild(currentItem);
+                    currentIndent = indent;
+                    return;
+                }
+
+                let nestedList = currentItem.querySelector('ul');
+                if (!nestedList) {
+                    nestedList = document.createElement('ul');
+                    currentItem.appendChild(nestedList);
+                }
+
+                const nestedItem = document.createElement('li');
+                nestedItem.textContent = content;
+                nestedList.appendChild(nestedItem);
             });
             modal.classList.add('show');
         });
