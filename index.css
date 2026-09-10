@@ -1658,10 +1658,11 @@ body::after {
     flex: 0 0 90%;      /* Takes 90% of phone width */
     margin: 0 1.5%;
     background-color: var(--primary-color); /* NEW: Adds a "card" background */
-    transform: scale(0.9); /* Scale down non-active slides a bit more */
+    transform: none;
+    opacity: 1;
 }
 .slide.active {
-    transform: scale(1); /* Active slide is full size */
+    transform: none;
 }
 
     .slide img {
