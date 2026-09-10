@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const countdownDuration = (
         (20 * 24 * 60 * 60) +
         (10 * 60 * 60) +
-        (53 * 60) +
+        (25 * 60) +
         20
     ) * 1000;
     let countdownDate = Number(localStorage.getItem(countdownStorageKey));
