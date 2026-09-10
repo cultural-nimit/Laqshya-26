@@ -244,58 +244,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    const countdownTimer = document.getElementById('countdown-timer');
-    const countdownStorageKey = 'laqshya-countdown-end-v4';
-    const countdownDuration = (
-        (20 * 24 * 60 * 60) +
-        (10 * 60 * 60) +
-        (10 * 60) +
-        20
-    ) * 1000;
-    let countdownDate = Number(localStorage.getItem(countdownStorageKey));
-
-    if (!Number.isFinite(countdownDate) || countdownDate <= Date.now()) {
-        countdownDate = Date.now() + countdownDuration;
-        localStorage.setItem(countdownStorageKey, String(countdownDate));
-    }
-    const countdownElements = {
-        days: document.getElementById('days'),
-        hours: document.getElementById('hours'),
-        minutes: document.getElementById('minutes'),
-        seconds: document.getElementById('seconds')
-    };
-
-    if (countdownTimer && Object.values(countdownElements).every(Boolean)) {
-        const updateCountdown = () => {
-            const distance = countdownDate - Date.now();
-
-            if (distance <= 0) {
-                countdownTimer.innerHTML = "<div class='event-live'>Event is LIVE!</div>";
-                return false;
-            }
-
-            const values = {
-                days: Math.floor(distance / 86400000),
-                hours: Math.floor((distance % 86400000) / 3600000),
-                minutes: Math.floor((distance % 3600000) / 60000),
-                seconds: Math.floor((distance % 60000) / 1000)
-            };
-
-            Object.entries(values).forEach(([unit, value]) => {
-                countdownElements[unit].textContent = String(value).padStart(2, '0');
-            });
-            return true;
-        };
-
-        if (updateCountdown()) {
-            const countdownInterval = setInterval(() => {
-                if (!updateCountdown()) {
-                    clearInterval(countdownInterval);
-                }
-            }, 1000);
-        }
-    }
-
 }); // This is the end of your DOMContentLoaded
 // });
 
