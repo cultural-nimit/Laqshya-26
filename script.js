@@ -244,44 +244,57 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ===== START: COUNTDOWN TIMER LOGIC =====
-    function startCountdown() {
-        const countDownDate = new Date("Dec 1, 2025 00:00:00").getTime();
-        const daysEl = document.getElementById("days");
-        const hoursEl = document.getElementById("hours");
-        const minutesEl = document.getElementById("minutes");
-        const secondsEl = document.getElementById("seconds");
+    const countdownTimer = document.getElementById('countdown-timer');
+    const countdownStorageKey = 'laqshya-countdown-end-v3';
+    const countdownDuration = (
+        (20 * 24 * 60 * 60) +
+        (10 * 60 * 60) +
+        (53 * 60) +
+        20
+    ) * 1000;
+    let countdownDate = Number(localStorage.getItem(countdownStorageKey));
 
-        if (!daysEl || !hoursEl || !minutesEl || !secondsEl) {
-            console.error("Countdown elements not found!");
-            return; // Exit if elements are missing
-        }
-
-        const countdownFunction = setInterval(function () {
-            const now = new Date().getTime();
-            const distance = countDownDate - now;
-
-            // Time calculations
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // Output the result in elements
-            daysEl.textContent = days < 10 ? '0' + days : days;
-            hoursEl.textContent = hours < 10 ? '0' + hours : hours;
-            minutesEl.textContent = minutes < 10 ? '0' + minutes : minutes;
-            secondsEl.textContent = seconds < 10 ? '0' + seconds : seconds;
-
-            // If the count down is finished, write some text
-            if (distance < 0) {
-                clearInterval(countdownFunction);
-                document.getElementById("countdown-timer").innerHTML = "<div class='event-live'>Event is LIVE!</div>"; // Or some other message
-            }
-        }, 1000);
+    if (!Number.isFinite(countdownDate) || countdownDate <= Date.now()) {
+        countdownDate = Date.now() + countdownDuration;
+        localStorage.setItem(countdownStorageKey, String(countdownDate));
     }
-    startCountdown(); // Start the countdown on page load
-    // ===== END: COUNTDOWN TIMER LOGIC =====
+    const countdownElements = {
+        days: document.getElementById('days'),
+        hours: document.getElementById('hours'),
+        minutes: document.getElementById('minutes'),
+        seconds: document.getElementById('seconds')
+    };
+
+    if (countdownTimer && Object.values(countdownElements).every(Boolean)) {
+        const updateCountdown = () => {
+            const distance = countdownDate - Date.now();
+
+            if (distance <= 0) {
+                countdownTimer.innerHTML = "<div class='event-live'>Event is LIVE!</div>";
+                return false;
+            }
+
+            const values = {
+                days: Math.floor(distance / 86400000),
+                hours: Math.floor((distance % 86400000) / 3600000),
+                minutes: Math.floor((distance % 3600000) / 60000),
+                seconds: Math.floor((distance % 60000) / 1000)
+            };
+
+            Object.entries(values).forEach(([unit, value]) => {
+                countdownElements[unit].textContent = String(value).padStart(2, '0');
+            });
+            return true;
+        };
+
+        if (updateCountdown()) {
+            const countdownInterval = setInterval(() => {
+                if (!updateCountdown()) {
+                    clearInterval(countdownInterval);
+                }
+            }, 1000);
+        }
+    }
 
 }); // This is the end of your DOMContentLoaded
 // });
