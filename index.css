@@ -27,10 +27,10 @@ body {
     overflow-x: hidden;
 
     /* --- BACKGROUND IMAGE (Assuming you still want it) --- */
-    background-image: linear-gradient(rgba(3, 8, 26, 0.6), rgba(3, 8, 26, 0.7)), url(cassi1.jpg);
-    /* Adjusted gradient colors */
+    background-image: linear-gradient(rgba(20, 7, 7, 0.28), rgba(20, 7, 7, 0.5)), url(cassi1.jpg);
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
     background-attachment: fixed;
     /* --- END UPDATE --- */
 }
@@ -43,7 +43,7 @@ body::after {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.6);
+    box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.3);
     /* Slightly darker shadow */
 }
 
@@ -1596,6 +1596,10 @@ body::after {
 
 @media(max-width: 768px) {
     body {
+        background-image: linear-gradient(rgba(20, 7, 7, 0.22), rgba(20, 7, 7, 0.42)), url(cassi1.jpg);
+        background-size: cover;
+        background-position: center top;
+        background-repeat: no-repeat;
         background-attachment: scroll;
     }
 
@@ -1789,6 +1793,11 @@ body::after {
     /* Coordinator mobile styles */
     .coordinator-pair {
         flex-direction: column;
+        align-items: center;
+    }
+
+    .coord-column {
+        width: 100%;
     }
 
     .coord-column:last-child {
@@ -1804,11 +1813,12 @@ body::after {
     .coord-column .coordinator-grid {
         display: grid;
         grid-template-columns: 1fr;
+        justify-items: center;
     }
 
     .coordinator-card {
-        max-width: none;
-        /* Full width */
+        width: min(100%, 300px);
+        max-width: 300px;
     }
 }
 
