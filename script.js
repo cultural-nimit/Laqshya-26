@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const countdownTimer = document.getElementById('countdown-timer');
-    const countdownStorageKey = 'laqshya-countdown-end-v3';
+    const countdownStorageKey = 'laqshya-countdown-end-v4';
     const countdownDuration = (
         (20 * 24 * 60 * 60) +
         (10 * 60 * 60) +
