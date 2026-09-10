@@ -1595,6 +1595,15 @@ body::after {
 }
 
 @media(max-width: 768px) {
+    body {
+        background-attachment: scroll;
+    }
+
+    .hero-bg-layer {
+        animation: none;
+        transform: scale(1.2);
+    }
+
     .nav-links {
         position: fixed;
         right: -100%;
