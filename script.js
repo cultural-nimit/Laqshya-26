@@ -20,6 +20,34 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    const navigationLinks = [...document.querySelectorAll('.nav-links a[href^="#"]')];
+    const navigationSections = navigationLinks
+        .map(link => document.querySelector(link.getAttribute('href')))
+        .filter(Boolean);
+
+    function setActiveNavigation(sectionId) {
+        navigationLinks.forEach(link => {
+            const isActive = link.getAttribute('href') === `#${sectionId}`;
+            link.classList.toggle('active', isActive);
+            if (isActive) {
+                link.setAttribute('aria-current', 'page');
+            } else {
+                link.removeAttribute('aria-current');
+            }
+        });
+    }
+
+    if ('IntersectionObserver' in window) {
+        const navigationObserver = new IntersectionObserver(entries => {
+            const visibleSection = entries
+                .filter(entry => entry.isIntersecting)
+                .sort((first, second) => second.intersectionRatio - first.intersectionRatio)[0];
+            if (visibleSection) setActiveNavigation(visibleSection.target.id);
+        }, { rootMargin: '-25% 0px -60% 0px', threshold: [0.1, 0.4, 0.7] });
+
+        navigationSections.forEach(section => navigationObserver.observe(section));
+    }
+
     // Modal Logic
     const modal = document.getElementById('guidelines-modal');
     const modalTitle = document.getElementById('modal-title');
@@ -95,6 +123,100 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    const eventSearch = document.getElementById('event-search');
+    const departmentFilter = document.getElementById('department-filter');
+    const eventTypeFilter = document.getElementById('event-type-filter');
+    const teamSizeFilter = document.getElementById('team-size-filter');
+    const participationFilter = document.getElementById('participation-filter');
+    const resetEventFilters = document.getElementById('reset-event-filters');
+    const eventFilterStatus = document.getElementById('event-filter-status');
+    const eventCards = [...document.querySelectorAll('.event-card')];
+
+    function getEventMetadata(card) {
+        const tabContent = card.closest('.tab-content');
+        const department = card.closest('.department-section')?.querySelector('.department-title')?.textContent.trim() || 'General';
+        const type = tabContent?.id === 'core-events' ? 'Core' :
+            tabContent?.id === 'general-events' ? 'General' : 'Sports & Cultural';
+        const text = card.textContent.toLowerCase();
+        const isIndividual = /individual|solo/.test(text);
+        const hasTeam = /team|members|participants/.test(text);
+        const hasLargeTeam = /(?:8\s*[-–]\s*12|7\s*[-–]\s*12|maximum of (?:8|9|10|12)|five members|five participants)/.test(text);
+        const hasMediumTeam = /(?:5\s*[-–]\s*7|maximum of (?:5|6|7)|seven members)/.test(text);
+        const teamSize = isIndividual ? 'individual' : hasLargeTeam ? 'large' : hasMediumTeam ? 'medium' : hasTeam ? 'small' : 'unknown';
+        const participation = [
+            isIndividual ? 'individual' : hasTeam ? 'team' : null,
+            /\bug\b|undergraduate/.test(text) ? 'ug' : null,
+            /\bpg\b|postgraduate/.test(text) ? 'pg' : null
+        ].filter(Boolean);
+
+        return {
+            searchText: text,
+            department,
+            type,
+            teamSize,
+            participation
+        };
+    }
+
+    const eventMetadata = new Map(eventCards.map(card => [card, getEventMetadata(card)]));
+
+    function addFilterOptions(select, values) {
+        [...new Set(values)].sort().forEach(value => {
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = value;
+            select.appendChild(option);
+        });
+    }
+
+    if (departmentFilter && eventTypeFilter) {
+        addFilterOptions(departmentFilter, eventCards.map(card => eventMetadata.get(card).department));
+        addFilterOptions(eventTypeFilter, eventCards.map(card => eventMetadata.get(card).type));
+    }
+
+    function updateEventFilters() {
+        const search = eventSearch?.value.trim().toLowerCase() || '';
+        const selectedDepartment = departmentFilter?.value || 'all';
+        const selectedType = eventTypeFilter?.value || 'all';
+        const selectedTeamSize = teamSizeFilter?.value || 'all';
+        const selectedParticipation = participationFilter?.value || 'all';
+        let visibleCount = 0;
+
+        eventCards.forEach(card => {
+            const metadata = eventMetadata.get(card);
+            const matches = (!search || metadata.searchText.includes(search)) &&
+                (selectedDepartment === 'all' || metadata.department === selectedDepartment) &&
+                (selectedType === 'all' || metadata.type === selectedType) &&
+                (selectedTeamSize === 'all' || metadata.teamSize === selectedTeamSize) &&
+                (selectedParticipation === 'all' || metadata.participation.includes(selectedParticipation));
+
+            card.hidden = !matches;
+            if (matches) visibleCount += 1;
+        });
+
+        document.querySelectorAll('.department-section').forEach(section => {
+            section.hidden = !section.querySelector('.event-card:not([hidden])');
+        });
+
+        if (eventFilterStatus) {
+            eventFilterStatus.textContent = `${visibleCount} event${visibleCount === 1 ? '' : 's'} found`;
+        }
+    }
+
+    [eventSearch, departmentFilter, eventTypeFilter, teamSizeFilter, participationFilter]
+        .filter(Boolean)
+        .forEach(control => control.addEventListener('input', updateEventFilters));
+
+    resetEventFilters?.addEventListener('click', () => {
+        if (eventSearch) eventSearch.value = '';
+        [departmentFilter, eventTypeFilter, teamSizeFilter, participationFilter]
+            .filter(Boolean)
+            .forEach(select => { select.value = 'all'; });
+        updateEventFilters();
+    });
+
+    updateEventFilters();
 
     // =========================================================
     // --- START: UPDATED Banner Carousel Logic (Sliding) ---
