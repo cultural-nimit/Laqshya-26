@@ -381,19 +381,42 @@ function closeAlert() {
 // ===== START: PROMO POPUP ADDON =====
 const brochureModal = document.getElementById('brochure-modal');
 const closeBrochureBtn = document.querySelector('.close-brochure');
+const annoModal = document.getElementById('anno-modal');
+const closeAnnoBtn = document.querySelector('.close-anno');
+
+function showAnnoPopup() {
+    if (annoModal) {
+        annoModal.classList.add('show-brochure');
+    }
+}
+
+function closeBrochure() {
+    brochureModal.classList.remove('show-brochure');
+    showAnnoPopup();
+}
 
 if (brochureModal && closeBrochureBtn) {
     setTimeout(() => {
         brochureModal.classList.add('show-brochure');
     }, 1000);
 
-    closeBrochureBtn.addEventListener('click', () => {
-        brochureModal.classList.remove('show-brochure');
-    });
+    closeBrochureBtn.addEventListener('click', closeBrochure);
 
     window.addEventListener('click', (event) => {
         if (event.target === brochureModal) {
-            brochureModal.classList.remove('show-brochure');
+            closeBrochure();
+        }
+    });
+}
+
+if (annoModal && closeAnnoBtn) {
+    closeAnnoBtn.addEventListener('click', () => {
+        annoModal.classList.remove('show-brochure');
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === annoModal) {
+            annoModal.classList.remove('show-brochure');
         }
     });
 }
