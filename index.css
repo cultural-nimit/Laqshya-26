@@ -933,6 +933,25 @@ body::after {
     text-decoration: underline;
 }
 
+.guideline-banner {
+    margin-top: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.guideline-banner img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    border-radius: 18px;
+    border: 2px solid rgba(255, 179, 71, 0.45);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.32);
+    background: rgba(11, 19, 30, 0.8);
+}
+
 /* --- END UPDATED GUIDELINES SECTION STYLES --- */
 
 
